@@ -1,2 +1,2 @@
-# MySpinClass3
+# MySpinClass
 FOS version of a spin class
