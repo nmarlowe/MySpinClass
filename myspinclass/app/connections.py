@@ -1,7 +1,16 @@
 ''' myspinclass.app.connections
 '''
+from myspinclass.app.constants import _2ad2_characteristic
+from myspinclass.app.handlers import handle_speed
 import pygatt
 import json
+
+MOST_RECENT_SPEED = 0.0
+
+def _handle_speed(handler, value):
+    global MOST_RECENT_SPEED
+    mph = handle_speed(handler, value)
+    MOST_RECENT_SPEED = mph
 
 class DeviceConnection(object):
 
@@ -28,7 +37,15 @@ class DeviceConnection(object):
         
         DeviceConnection.instance.device = DeviceConnection.instance.adapt.connect(addr, address_type=DeviceConnection.instance.address_type)
         DeviceConnection.instance.addr = addr
-        return DeviceConnection.instance.device
 
     def scan_characteristics(self):
-        return json.dumps(DeviceConnection.instance.device.discover_characteristics())
+        val = DeviceConnection.instance.device.discover_characteristics()
+        print(val)
+        return val
+
+
+    def connect_speed(self):
+        DeviceConnection.instance.device.subscribe(_2ad2_characteristic, callback=_handle_speed)
+
+    def read_speed(self):
+        return MOST_RECENT_SPEED

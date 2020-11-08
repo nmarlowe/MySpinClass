@@ -33,7 +33,14 @@ def bluetooth_services(device):
 def bluetooth_characteristic_list():
     return connection.scan_characteristics()
 
-@ble_bp.route('/bluetooth/<device>/<service>/<characteristic>', methods=['GET'])
-def bluetooth_connect_characteristic(device, service, characteristic):
-    pass
+@ble_bp.route('/bluetooth/device/connect/speed', methods=['GET'])
+def bluetooth_connect_speed():
+    connection.connect_speed()
+    return "Connected to characteristic to read speed."
+
+@ble_bp.route('/bluetooth/device/read/speed', methods=['GET'])
+def bluetooth_get_speed():
+    return json.dumps({
+        "speed" : connection.read_speed()
+    })
 
